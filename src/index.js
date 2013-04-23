@@ -69,13 +69,13 @@ app.get('/card/:color/:number', function(req, res){
 
         });
 
-    //  });
+      });
 
-    //});
+    });
 
-  }
+ // }
 
-});
+//});
 });
 
 // Render an individual book
