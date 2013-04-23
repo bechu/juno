@@ -46,9 +46,9 @@ app.post('/login', function(req, res){
 app.get('/card/:color/:number', function(req, res){
   var fileName =  __dirname + "/public/card_n.svg";
 
-fs.exists(fileName, function(exists) {
+//fs.exists(fileName, function(exists) {
 
-  if (exists) {
+  //if (exists) {
 
     fs.stat(fileName, function(error, stats) {
 
@@ -69,7 +69,7 @@ fs.exists(fileName, function(exists) {
 
         });
 
-      });
+    //  });
 
     });
 
