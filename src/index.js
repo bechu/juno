@@ -71,7 +71,7 @@ app.get('/card/:color/:number', function(req, res){
 
     //  });
 
-    });
+    //});
 
   }
 
