@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bootstrap 101 Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    </head>
+    <body>
+        <h1>Hello, world!</h1>
+        <script src="js/jquery-1.9.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <p>
+        <button class="btn btn-large btn-primary" type="button">Large button</button> 
+        </p>
+        <div class="container">
+            <div class="row-fluid">
+                <div class="span4">
+                    <object data="card/red/3" type="image/svg+xml">
+                    </object>
+                </div>
+                <div class="span4">
+                    <object data="card/green/3" type="image/svg+xml">
+                    </object>
+                </div>
+            </div>
+        </div>
+        <div>Salut</div>
+         <script>
+             $(document).ready(function () {
+                 var request = $.ajax({
+                     url: "game/name",
+                     dataType: "html"
+                 });
+                 request.done(function(msg) {
+                     $("p").html( msg );
+                 });
+
+             $("div").text("The DOM is now loaded and can be manipulated.");
+             });
+         </script>
+
+    </body>
+</html>
