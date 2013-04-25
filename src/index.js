@@ -10,32 +10,34 @@ app.configure(function() {
     var store = new express.session.MemoryStore;
     app.use(express.session({ secret: 'whatever', store: store }));
 
-//    app.set('views', __dirname+"/public/");
-//    app.set('view engine', 'ejs');
+    //    app.set('views', __dirname+"/public/");
+    //    app.set('view engine', 'ejs');
     app.use(express.logger('dev'));
     app.use(express.static(__dirname+"/public/")); 
 
-//    app.use(express.bodyParser());
+    //    app.use(express.bodyParser());
     app.use(app.router);
 
 });
 
+app.get('/disconnect', function(req, res) {
+    delete req.session.login;
+    res.redirect("/");
+});
 
 app.get('/login', function(req, res){
     req.session.login = req.query['user'];
     res.redirect("/");
-    //res.send("<p>Test de jerome"+req.query['user']+"</p>");
 });
 
 app.get('/', function(req, res) {
-    //res.send("<p>Test de jerome</p>");
     if(req.session.login)
 {
-      res.sendfile(__dirname+'/public/board.html');
-      //delete req.session.login;
+    res.sendfile(__dirname+'/public/board.html');
+    //delete req.session.login;
 }
-    else
-      res.sendfile(__dirname+'/public/login.html');
+else
+res.sendfile(__dirname+'/public/login.html');
 });
 
 app.get('/game/name', function(req, res) {
