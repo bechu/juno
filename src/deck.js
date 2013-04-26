@@ -10,7 +10,7 @@ Deck.prototype.Deal = function(count) {
   return this.d.draw(count);
 }
 
-Deck.prototype.Length = function(count) {
+Deck.prototype.Size = function(count) {
   return this.d.length;
 }
 
