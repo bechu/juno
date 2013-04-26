@@ -1,8 +1,11 @@
 var express = require('express');
 var card = require('./card');
 var deck = require('./deck');
-var fs = require('fs')
+var fs = require('fs');
 var app = express();
+
+var engine = require("./engine");
+
 
 app.configure(function() {
 
@@ -17,7 +20,7 @@ app.configure(function() {
 
     //    app.use(express.bodyParser());
     app.use(app.router);
-
+    app.game = new engine.Engine();
 });
 
 app.get('/disconnect', function(req, res) {
@@ -27,6 +30,7 @@ app.get('/disconnect', function(req, res) {
 
 app.get('/login', function(req, res){
     req.session.login = req.query['user'];
+    req.session.gid = app.game.AddPlayer(req.session.login);
     res.redirect("/");
 });
 
@@ -44,8 +48,16 @@ app.get('/game/name', function(req, res) {
     res.send("<h1>" + req.session.login + "</h1>");
 });
 
+app.get('/game/deal', function(req, res) {
+    app.game.Deal();
+});
+   
 app.get('/game/update', function(req, res) {
-    res.send("<p>Test de jerome</p>");
+    res.send(app.game.RenderPlayers());
+});
+
+app.get('/game/myhand', function(req, res) {
+    res.send(app.game.RenderPlayers());
 });
 
 app.get('/card/:color/:number', function(req, res){
@@ -85,4 +97,3 @@ app.get('/card/:color/:number', function(req, res){
 
 app.listen(8888);
 console.log('Listening on port 8888');
-

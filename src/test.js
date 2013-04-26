@@ -64,5 +64,7 @@ exports.EngineTest = function (test) {
 	e.AddPlayer("Hélène");
 	e.AddPlayer("Mathieu");
 	test.equals(e.CountPlayer(), 3);
+	e.Deal();
+	console.log(e.RenderPlayers());
 	test.done();
 }

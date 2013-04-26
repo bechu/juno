@@ -37,7 +37,36 @@
                  });
 
              $("div").text("The DOM is now loaded and can be manipulated.");
+
+setInterval(function() {
+                     var request = $.ajax({
+                     url: "game/update",
+                     dataType: "html"
+                 });
+                 request.done(function(msg) {
+                     $("p").html( msg );
+                 });
+
+}, 1000); //5 seconds
+
+/*
+$.ajax({
+    url: "/getData",
+    timeout:2000
+}).done(function(){
+    //do something
+        alert('Failed from done'); 
+}).fail(function(jqXHR, textStatus){
+    if(textStatus == 'timeout')
+    {     
+        alert('Failed from timeout'); 
+        //do something. Try again perhaps?
+    }
+});​
+*/
              });
+
+
          </script>
 
         <a href="disconnect" class="btn btn-large btn-primary" type="button">disconnect</a> 
