@@ -13,4 +13,8 @@ Player.prototype.GetHand  = function() {
   return this.hand;
 }
 
+Player.prototype.Reset = function() {
+  this.hand.Reset();
+}
+
 module.exports.Player = Player;

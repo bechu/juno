@@ -11,7 +11,6 @@ Hand.prototype.Size = function() {
     return this.cards.length;
 }
 
-
 Hand.prototype.Get = function(index) {
     if(index < this.cards.length)
         return this.cards[index];

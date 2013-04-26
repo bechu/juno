@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Bootstrap 101 Template</title>
+        <title>JuNo</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -10,65 +10,61 @@
         <h1>Hello, world!</h1>
         <script src="js/jquery-1.9.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-        <p>
-        <button class="btn btn-large btn-primary" type="button">Large button</button> 
-        </p>
+
         <div class="container">
+            <div id="players">
+                players
+            </div>
+            <div id="myhand">
+            </div>
             <div class="row-fluid">
                 <div class="span4">
                     <object data="card/red/3" type="image/svg+xml">
                     </object>
                 </div>
                 <div class="span4">
-                    <object data="card/green/3" type="image/svg+xml">
-                    </object>
+
                 </div>
             </div>
         </div>
         <div>Salut</div>
          <script>
-             $(document).ready(function () {
-                 var request = $.ajax({
-                     url: "game/name",
-                     dataType: "html"
-                 });
-                 request.done(function(msg) {
-                     $("p").html( msg );
-                 });
-
-             $("div").text("The DOM is now loaded and can be manipulated.");
-
-setInterval(function() {
+         updatePlayers  = function() {
                      var request = $.ajax({
                      url: "game/update",
                      dataType: "html"
                  });
                  request.done(function(msg) {
-                     $("p").html( msg );
+                     $("#players").html( msg );
                  });
+        }
+        updateHand  = function() {
+                     var request = $.ajax({
+                     url: "game/myhand",
+                     dataType: "html"
+                 });
+                 request.done(function(msg) {
+                     $("#myhand").html( msg );
+                 });
+        }
+        deal  = function() {
+                     var request = $.ajax({
+                     url: "game/deal",
+                     dataType: "html"
+                 });
+        }
 
-}, 1000); //5 seconds
 
-/*
-$.ajax({
-    url: "/getData",
-    timeout:2000
-}).done(function(){
-    //do something
-        alert('Failed from done'); 
-}).fail(function(jqXHR, textStatus){
-    if(textStatus == 'timeout')
-    {     
-        alert('Failed from timeout'); 
-        //do something. Try again perhaps?
-    }
-});​
-*/
+             $(document).ready(function () {
+                updatePlayers();
+                setInterval(function() {updateHand();updatePlayers()}, 1000); 
+                
              });
 
 
          </script>
 
-        <a href="disconnect" class="btn btn-large btn-primary" type="button">disconnect</a> 
+        <a href="disconnect" class="btn btn-large btn-primary" type="button">Se déconnecter</a> 
+        <button class="btn btn-large btn-primary" type="button" onClick="deal();">Distribuer</button> 
     </body>
 </html>

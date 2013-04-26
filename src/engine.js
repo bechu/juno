@@ -18,6 +18,10 @@ Engine.prototype.AddPlayer  = function(name) {
   return this.players.length-1
 }
 
+Engine.prototype.RemovePlayer  = function(index) {
+	this.players = this.players.slice(index+1, 1)
+}
+
 Engine.prototype.CountPlayer  = function() {
   return this.players.length
 }
@@ -28,18 +32,21 @@ Engine.prototype.GetPlayer = function(index) {
 
 Engine.prototype.Deal = function() {
 	this.game_started = true;
-	for(var i in this.players)
+	this.deck.Reset();
+	for(var i in this.players) {
 		this.DealPlayer(i);
+	}
 }
 
 Engine.prototype.DealPlayer = function(index) {
 	var player = this.GetPlayer(index);
 	var cards = this.deck.Deal(5);
+	player.Reset();
 	for(var i in cards)
 		player.GetHand().Add(cards[i]);
 }
 
-Engine.prototype.RenderPlayers = function(index) {
+Engine.prototype.RenderPlayers = function() {
 	var ret = "";
 	for(var i in this.players)
 	{
@@ -48,6 +55,19 @@ Engine.prototype.RenderPlayers = function(index) {
 		ret += p;
 	}
 	return ret;
+}
+
+Engine.prototype.RenderHand = function(index) {
+		var player = this.players[index];
+		var hand = player.GetHand();
+		var ret = "Nom : " + player.GetName() + " Count : " + player.GetHand().Size() + "<hr />";
+		for(var i=0;i<hand.Size();i++)
+		{
+			ret += hand.Get(i);
+			console.log(hand.Get(i));
+		}
+
+		return ret + "<b>Coucou</b>"
 }
 
 module.exports.Engine = Engine;

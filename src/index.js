@@ -4,7 +4,7 @@ var deck = require('./deck');
 var fs = require('fs');
 var app = express();
 
-var engine = require("./engine");
+var engine = require('./engine');
 
 
 app.configure(function() {
@@ -24,7 +24,9 @@ app.configure(function() {
 });
 
 app.get('/disconnect', function(req, res) {
+    app.game.RemovePlayer(req.session.gid);
     delete req.session.login;
+    delete req.session.gid;
     res.redirect("/");
 });
 
@@ -36,12 +38,9 @@ app.get('/login', function(req, res){
 
 app.get('/', function(req, res) {
     if(req.session.login)
-{
-    res.sendfile(__dirname+'/public/board.html');
-    //delete req.session.login;
-}
-else
-res.sendfile(__dirname+'/public/login.html');
+        res.sendfile(__dirname+'/public/board.html');
+    else
+        res.sendfile(__dirname+'/public/login.html');
 });
 
 app.get('/game/name', function(req, res) {
@@ -50,6 +49,7 @@ app.get('/game/name', function(req, res) {
 
 app.get('/game/deal', function(req, res) {
     app.game.Deal();
+    res.send("done");
 });
    
 app.get('/game/update', function(req, res) {
@@ -57,15 +57,11 @@ app.get('/game/update', function(req, res) {
 });
 
 app.get('/game/myhand', function(req, res) {
-    res.send(app.game.RenderPlayers());
+    res.send(app.game.RenderHand(req.session.gid));
 });
 
 app.get('/card/:color/:number', function(req, res){
     var fileName =  __dirname + "/public/card_n.svg";
-
-    //fs.exists(fileName, function(exists) {
-
-    //if (exists) {
 
     fs.stat(fileName, function(error, stats) {
 
@@ -90,9 +86,6 @@ app.get('/card/:color/:number', function(req, res){
 
     });
 
-    // }
-
-    //});
 });
 
 app.listen(8888);
