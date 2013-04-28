@@ -3,31 +3,31 @@
     <head>
         <title>JuNo</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     </head>
     <body>
-        <h1>Hello, world!</h1>
+        <h1>JuNo</h1>
         <script src="js/jquery-1.9.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
 
-        <div class="container">
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span2">
             <div id="players">
-                players
             </div>
+                    <a href="disconnect" class="btn btn-large btn-primary" type="button">Se déconnecter</a> 
+        <button class="btn btn-large btn-primary" type="button" onClick="deal();">Distribuer</button> 
+    </div>
+    <div class="span10">       
+<div class="alert alert-info" id="deck">
+</div>
+
             <div id="myhand">
             </div>
-            <div class="row-fluid">
-                <div class="span4">
-                    <object data="card/red/3" type="image/svg+xml">
-                    </object>
-                </div>
-                <div class="span4">
+    </div>
+  </div>
+</div>
 
-                </div>
-            </div>
-        </div>
-        <div>Salut</div>
          <script>
          updatePlayers  = function() {
                      var request = $.ajax({
@@ -44,27 +44,36 @@
                      dataType: "html"
                  });
                  request.done(function(msg) {
-                     $("#myhand").html( msg );
+                    if(msg.length > 0)
+                        $("#myhand").html( msg );
+                 });
+        }
+        updateDeck  = function() {
+                     var request = $.ajax({
+                     url: "game/deck",
+                     dataType: "html"
+                 });
+                 request.done(function(msg) {
+                    if(msg.length > 0)
+                        if(msg.length != $("#deck").html().length)
+                            $("#deck").html( msg );
                  });
         }
         deal  = function() {
                      var request = $.ajax({
                      url: "game/deal",
-                     dataType: "html"
+                         dataType: "html"
                  });
         }
 
 
              $(document).ready(function () {
                 updatePlayers();
-                setInterval(function() {updateHand();updatePlayers()}, 1000); 
+                setInterval(function() {updateHand();updatePlayers();updateDeck()}, 1000); 
                 
              });
 
 
          </script>
-
-        <a href="disconnect" class="btn btn-large btn-primary" type="button">Se déconnecter</a> 
-        <button class="btn btn-large btn-primary" type="button" onClick="deal();">Distribuer</button> 
     </body>
 </html>

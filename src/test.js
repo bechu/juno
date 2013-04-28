@@ -25,6 +25,10 @@ exports.DeckTest = function (test) {
 	test.equals(u.Size(), 96);
 	u.Reset();
 	test.equals(u.Size(), 108);
+	var j = u.Deal(5);
+	for(var i in j) {
+		console.log(j[i]);
+	}
 	test.done();
 }
 

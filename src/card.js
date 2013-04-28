@@ -24,5 +24,16 @@ Card.prototype.IsSameType = function(rhs) {
     return false;
 }
 
-module.exports.Card = Card;
+Card.prototype.GetUri = function() {
+  if(this.type == "*")
+  {
+    if(this.subtype == "+4") return "/plus4/";
+    if(this.subtype == "joker") return "/multi/";
+  }
+  if(this.subtype == '+2') return "/plus2/"+this.type+"/";
+  if(this.subtype == 'skip') return "/skip/"+this.type+"/";
+  if(this.subtype == 'reverse') return "/reverse/"+this.type+"/";
+  return "/card/"+this.type+"/"+this.subtype+"/";
+}
 
+module.exports.Card = Card;

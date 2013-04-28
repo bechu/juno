@@ -15,7 +15,8 @@ Deck.prototype.Size = function(count) {
 }
 
 Deck.prototype.Reset = function(count) {
-  return this.d.reset();
+  this.d.reset();
+  this.d.shuffle();
 }
 
 Deck.prototype.Create = function() {
@@ -43,4 +44,3 @@ Deck.prototype.Create = function() {
 }
 
 module.exports.Deck = Deck;
-

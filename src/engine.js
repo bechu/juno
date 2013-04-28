@@ -7,6 +7,7 @@ var Engine = function() {
 	this.players = new Array();
 	this.deck = new deck.Deck();
 	this.game_started = false;
+	this.heap = null;
 }
 
 Engine.prototype.IsStarted = function(name) {
@@ -30,12 +31,21 @@ Engine.prototype.GetPlayer = function(index) {
 	return this.players[index]
 }
 
+Engine.prototype.GetHeap = function() {
+	return this.heap
+}
+
+Engine.prototype.DeckSize = function() {
+	return this.deck.Size();
+}
+
 Engine.prototype.Deal = function() {
 	this.game_started = true;
 	this.deck.Reset();
 	for(var i in this.players) {
 		this.DealPlayer(i);
 	}
+	this.heap = this.deck.Deal(1);
 }
 
 Engine.prototype.DealPlayer = function(index) {
@@ -44,6 +54,14 @@ Engine.prototype.DealPlayer = function(index) {
 	player.Reset();
 	for(var i in cards)
 		player.GetHand().Add(cards[i]);
+}
+
+Engine.prototype.RenderDeck = function() {
+	var ret = "";
+	if(this.heap != null)
+		ret += "<object data='"+this.heap.GetUri()+"' type='image/svg+xml'></object>";
+	ret += " Count : " + this.DeckSize();
+	return ret;
 }
 
 Engine.prototype.RenderPlayers = function() {
@@ -58,16 +76,22 @@ Engine.prototype.RenderPlayers = function() {
 }
 
 Engine.prototype.RenderHand = function(index) {
+	if(index < this.players.length) {
 		var player = this.players[index];
 		var hand = player.GetHand();
-		var ret = "Nom : " + player.GetName() + " Count : " + player.GetHand().Size() + "<hr />";
+		if(hand.Changed() == false)
+			return "";
+		var ret = "";
 		for(var i=0;i<hand.Size();i++)
 		{
-			ret += hand.Get(i);
-			console.log(hand.Get(i));
+			var c = hand.Get(i);
+			ret += "<object data='"+c.GetUri()+"' type='image/svg+xml'></object>"; 
 		}
-
-		return ret + "<b>Coucou</b>"
+/*        ret += "<hr > <object data='"+c.GetUri()+"' type='image/svg+xml'></object>"; 
+        ret += "<hr />";*/
+		return ret;
+	}
+	return "";
 }
 
 module.exports.Engine = Engine;

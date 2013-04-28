@@ -40,7 +40,12 @@ app.get('/', function(req, res) {
     if(req.session.login)
         res.sendfile(__dirname+'/public/board.html');
     else
-        res.sendfile(__dirname+'/public/login.html');
+    {
+    req.session.login = "Jérôme";
+    req.session.gid = app.game.AddPlayer(req.session.login);
+    res.redirect("/");
+      //  res.sendfile(__dirname+'/public/login.html');
+    }
 });
 
 app.get('/game/name', function(req, res) {
@@ -60,7 +65,23 @@ app.get('/game/myhand', function(req, res) {
     res.send(app.game.RenderHand(req.session.gid));
 });
 
-app.get('/card/:color/:number', function(req, res){
+app.get('/game/deck', function(req, res) {
+    res.send(app.game.RenderDeck());
+});
+
+app.get('/all/', function(req, res) {
+    var ret = "";
+    var d = new deck.Deck();
+    for(var i =0;i<108;i++) {
+        var c = d.Deal(1);
+        ret += c;
+        ret += "<hr > <object data='"+c.GetUri()+"' type='image/svg+xml'></object>"; 
+        ret += "<hr />";
+    }
+    res.send(ret);
+});
+
+app.get('/card/:color/:number', function(req, res) {
     var fileName =  __dirname + "/public/card_n.svg";
 
     fs.stat(fileName, function(error, stats) {
@@ -87,6 +108,137 @@ app.get('/card/:color/:number', function(req, res){
     });
 
 });
+
+app.get('/reverse/:color', function(req, res){
+    var fileName =  __dirname + "/public/card_inv.svg";
+
+    fs.stat(fileName, function(error, stats) {
+
+        fs.open(fileName, "r", function(error, fd) {
+
+            var buffer = new Buffer(stats.size);
+
+            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+
+                var data = buffer.toString("utf8", 0, buffer.length);
+                data = data.replace(/@@@color@@@/g, req.params.color);
+                fs.close(fd);
+                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
+                //res.render("card.ejs", {card: {'color': 'blue'}});
+                res.write(data);
+                res.end();
+
+            });
+
+        });
+
+    });
+
+});
+
+app.get('/plus2/:color', function(req, res){
+    var fileName =  __dirname + "/public/card2.svg";
+
+    fs.stat(fileName, function(error, stats) {
+
+        fs.open(fileName, "r", function(error, fd) {
+
+            var buffer = new Buffer(stats.size);
+
+            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+
+                var data = buffer.toString("utf8", 0, buffer.length);
+                data = data.replace(/@@@color@@@/g, req.params.color);
+                fs.close(fd);
+                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
+                //res.render("card.ejs", {card: {'color': 'blue'}});
+                res.write(data);
+                res.end();
+
+            });
+
+        });
+
+    });
+
+});
+
+app.get('/plus4/', function(req, res){
+    var fileName =  __dirname + "/public/card4.svg";
+
+    fs.stat(fileName, function(error, stats) {
+
+        fs.open(fileName, "r", function(error, fd) {
+
+            var buffer = new Buffer(stats.size);
+
+            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+
+                var data = buffer.toString("utf8", 0, buffer.length);
+                fs.close(fd);
+                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
+                res.write(data);
+                res.end();
+
+            });
+
+        });
+
+    });
+
+});
+
+app.get('/multi/', function(req, res){
+    var fileName =  __dirname + "/public/cardmulti.svg";
+
+    fs.stat(fileName, function(error, stats) {
+
+        fs.open(fileName, "r", function(error, fd) {
+
+            var buffer = new Buffer(stats.size);
+
+            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+
+                var data = buffer.toString("utf8", 0, buffer.length);
+                fs.close(fd);
+                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
+                res.write(data);
+                res.end();
+
+            });
+
+        });
+
+    });
+
+});
+
+app.get('/skip/:color', function(req, res){
+    var fileName =  __dirname + "/public/card_skip.svg";
+
+    fs.stat(fileName, function(error, stats) {
+
+        fs.open(fileName, "r", function(error, fd) {
+
+            var buffer = new Buffer(stats.size);
+
+            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+
+                var data = buffer.toString("utf8", 0, buffer.length);
+                data = data.replace(/@@@color@@@/g, req.params.color);
+                fs.close(fd);
+                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
+                res.write(data);
+                res.end();
+
+            });
+
+        });
+
+    });
+
+});
+
 
 app.listen(8888);
 console.log('Listening on port 8888');
