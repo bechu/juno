@@ -16,11 +16,24 @@
             <div id="players">
             </div>
                     <a href="disconnect" class="btn btn-large btn-primary" type="button">Se déconnecter</a> 
+        <hr />
         <button class="btn btn-large btn-primary" type="button" onClick="deal();">Distribuer</button> 
+        <hr />
+        <button class="btn btn-large btn-success" type="button" onClick="uno();">Uno</button> 
+        <hr />
+        <button type="button" class="btn btn-danger">Rouge</button> <i class="icon-tag"></i>
+        <button type="button" class="btn btn-warning">Jaune</button> <i class="icon-tag"></i>
+        <button type="button" class="btn btn-success">Vert</button> <i class="icon-tag"></i>
+        <button type="button" class="btn btn-primary">Bleu</button> <i class="icon-tag"></i>
     </div>
     <div class="span10">       
 <div class="alert alert-info" id="deck">
 </div>
+
+<div class="alert alert-error" id="message">
+  ...
+</div>
+
 
             <div id="myhand">
             </div>
@@ -66,6 +79,9 @@
                  });
         }
 
+        play  = function(index) {
+             $("#message").html( "play " + index );
+        }
 
              $(document).ready(function () {
                 updatePlayers();

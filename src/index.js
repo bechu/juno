@@ -13,7 +13,7 @@ app.configure(function() {
     var store = new express.session.MemoryStore;
     app.use(express.session({ secret: 'whatever', store: store }));
 
-    //    app.set('views', __dirname+"/public/");
+     app.set('views', __dirname+"/public/");
     //    app.set('view engine', 'ejs');
     app.use(express.logger('dev'));
     app.use(express.static(__dirname+"/public/")); 
@@ -44,7 +44,7 @@ app.get('/', function(req, res) {
     req.session.login = "Jérôme";
     req.session.gid = app.game.AddPlayer(req.session.login);
     res.redirect("/");
-      //  res.sendfile(__dirname+'/public/login.html');
+       // res.sendfile(__dirname+'/public/login.html');
     }
 });
 
@@ -126,6 +126,10 @@ app.get('/plus4/', function(req, res) {
 
 app.get('/multi/', function(req, res) {
     filter_svg(res, "/public/cardmulti.svg", null, null);
+});
+
+app.get('/back/', function(req, res) {
+    filter_svg(res, "/public/card_back.svg", null, null);
 });
 
 app.get('/skip/:color', function(req, res) {

@@ -58,9 +58,11 @@ Engine.prototype.DealPlayer = function(index) {
 
 Engine.prototype.RenderDeck = function() {
 	var ret = "";
-	if(this.heap != null)
-		ret += "<object data='"+this.heap.GetUri()+"' type='image/svg+xml'></object>";
-	ret += " Count : " + this.DeckSize();
+	if(this.heap != null)		
+		ret +=  '<button class="btn btn-warning" type="button" onClick="pick();"><object data="'+this.heap.GetUri()+'" type="image/svg+xml"></object></button>';
+
+		ret +=  '<button class="btn btn-info" type="button" onClick="pick();"><object data="/back/" type="image/svg+xml"></object> NB :  '+ this.DeckSize()+'</button>';
+	
 	return ret;
 }
 
@@ -85,7 +87,7 @@ Engine.prototype.RenderHand = function(index) {
 		for(var i=0;i<hand.Size();i++)
 		{
 			var c = hand.Get(i);
-			ret += "<object data='"+c.GetUri()+"' type='image/svg+xml'></object>"; 
+			ret +=  '<button class="btn btn-info" type="button" onClick="play('+i+');"><object data="'+c.GetUri()+'" type="image/svg+xml"></object></button>';
 		}
 /*        ret += "<hr > <object data='"+c.GetUri()+"' type='image/svg+xml'></object>"; 
         ret += "<hr />";*/
