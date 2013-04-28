@@ -81,162 +81,55 @@ app.get('/all/', function(req, res) {
     res.send(ret);
 });
 
+filter_svg = function(res, file, color, number) {
+    var fileName =  __dirname + file;
+
+    fs.stat(fileName, function(error, stats) {
+
+        fs.open(fileName, "r", function(error, fd) {
+
+            var buffer = new Buffer(stats.size);
+
+            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
+
+                var data = buffer.toString("utf8", 0, buffer.length);
+                data = data.replace(/@@@color@@@/g, color);
+                data = data.replace(/@@@number@@@/g, number);
+                fs.close(fd);
+                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
+                //res.render("card.ejs", {card: {'color': 'blue'}});
+                res.write(data);
+                res.end();
+
+            });
+
+        });
+
+    });
+};
+
 app.get('/card/:color/:number', function(req, res) {
-    var fileName =  __dirname + "/public/card_n.svg";
-
-    fs.stat(fileName, function(error, stats) {
-
-        fs.open(fileName, "r", function(error, fd) {
-
-            var buffer = new Buffer(stats.size);
-
-            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-
-                var data = buffer.toString("utf8", 0, buffer.length);
-                data = data.replace(/@@@color@@@/g, req.params.color);
-                data = data.replace(/@@@number@@@/g, req.params.number);
-                fs.close(fd);
-                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
-                //res.render("card.ejs", {card: {'color': 'blue'}});
-                res.write(data);
-                res.end();
-
-            });
-
-        });
-
-    });
-
+    filter_svg(res, "/public/card_n.svg", req.params.color, req.params.number);
 });
 
-app.get('/reverse/:color', function(req, res){
-    var fileName =  __dirname + "/public/card_inv.svg";
-
-    fs.stat(fileName, function(error, stats) {
-
-        fs.open(fileName, "r", function(error, fd) {
-
-            var buffer = new Buffer(stats.size);
-
-            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-
-                var data = buffer.toString("utf8", 0, buffer.length);
-                data = data.replace(/@@@color@@@/g, req.params.color);
-                fs.close(fd);
-                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
-                //res.render("card.ejs", {card: {'color': 'blue'}});
-                res.write(data);
-                res.end();
-
-            });
-
-        });
-
-    });
-
+app.get('/reverse/:color', function(req, res) {
+    filter_svg(res, "/public/card_inv.svg", req.params.color, null);
 });
 
-app.get('/plus2/:color', function(req, res){
-    var fileName =  __dirname + "/public/card2.svg";
-
-    fs.stat(fileName, function(error, stats) {
-
-        fs.open(fileName, "r", function(error, fd) {
-
-            var buffer = new Buffer(stats.size);
-
-            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-
-                var data = buffer.toString("utf8", 0, buffer.length);
-                data = data.replace(/@@@color@@@/g, req.params.color);
-                fs.close(fd);
-                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
-                //res.render("card.ejs", {card: {'color': 'blue'}});
-                res.write(data);
-                res.end();
-
-            });
-
-        });
-
-    });
-
+app.get('/plus2/:color', function(req, res) {
+    filter_svg(res, "/public/card2.svg", req.params.color, null);
 });
 
-app.get('/plus4/', function(req, res){
-    var fileName =  __dirname + "/public/card4.svg";
-
-    fs.stat(fileName, function(error, stats) {
-
-        fs.open(fileName, "r", function(error, fd) {
-
-            var buffer = new Buffer(stats.size);
-
-            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-
-                var data = buffer.toString("utf8", 0, buffer.length);
-                fs.close(fd);
-                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
-                res.write(data);
-                res.end();
-
-            });
-
-        });
-
-    });
-
+app.get('/plus4/', function(req, res) {
+    filter_svg(res, "/public/card4.svg", null, null);
 });
 
-app.get('/multi/', function(req, res){
-    var fileName =  __dirname + "/public/cardmulti.svg";
-
-    fs.stat(fileName, function(error, stats) {
-
-        fs.open(fileName, "r", function(error, fd) {
-
-            var buffer = new Buffer(stats.size);
-
-            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-
-                var data = buffer.toString("utf8", 0, buffer.length);
-                fs.close(fd);
-                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
-                res.write(data);
-                res.end();
-
-            });
-
-        });
-
-    });
-
+app.get('/multi/', function(req, res) {
+    filter_svg(res, "/public/cardmulti.svg", null, null);
 });
 
-app.get('/skip/:color', function(req, res){
-    var fileName =  __dirname + "/public/card_skip.svg";
-
-    fs.stat(fileName, function(error, stats) {
-
-        fs.open(fileName, "r", function(error, fd) {
-
-            var buffer = new Buffer(stats.size);
-
-            fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-
-                var data = buffer.toString("utf8", 0, buffer.length);
-                data = data.replace(/@@@color@@@/g, req.params.color);
-                fs.close(fd);
-                res.writeHeader(200, {"Content-Type": "image/svg+xml"});
-                res.write(data);
-                res.end();
-
-            });
-
-        });
-
-    });
-
+app.get('/skip/:color', function(req, res) {
+    filter_svg(res, "/public/card_skip.svg", req.params.color, null);
 });
 
 
