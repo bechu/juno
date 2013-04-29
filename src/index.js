@@ -15,7 +15,7 @@ app.configure(function() {
 
      app.set('views', __dirname+"/public/");
     //    app.set('view engine', 'ejs');
-    app.use(express.logger('dev'));
+    //app.use(express.logger('dev'));
     app.use(express.static(__dirname+"/public/")); 
 
     //    app.use(express.bodyParser());
@@ -43,6 +43,7 @@ app.get('/', function(req, res) {
     {
     req.session.login = "Jérôme";
     req.session.gid = app.game.AddPlayer(req.session.login);
+    app.game.AddPlayer("Hélène");
     res.redirect("/");
        // res.sendfile(__dirname+'/public/login.html');
     }
@@ -67,6 +68,15 @@ app.get('/game/myhand', function(req, res) {
 
 app.get('/game/deck', function(req, res) {
     res.send(app.game.RenderDeck());
+});
+
+app.get('/game/play/:index', function(req, res) {
+    res.send(app.game.Play(req.params.index));
+});
+
+
+app.get('/game/pick/', function(req, res) {
+    res.send(app.game.Pick(req.session.gid));
 });
 
 app.get('/all/', function(req, res) {

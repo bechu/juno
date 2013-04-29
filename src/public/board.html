@@ -6,28 +6,31 @@
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     </head>
     <body>
-        <h1>JuNo</h1>
         <script src="js/jquery-1.9.1.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
 
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span2">
-            <div id="players">
-            </div>
+            <div id="players"></div>
                     <a href="disconnect" class="btn btn-large btn-primary" type="button">Se déconnecter</a> 
         <hr />
         <button class="btn btn-large btn-primary" type="button" onClick="deal();">Distribuer</button> 
         <hr />
+        <button class="btn btn-large btn-success" type="button" onClick="done();">Terminer</button> 
         <button class="btn btn-large btn-success" type="button" onClick="uno();">Uno</button> 
         <hr />
         <button type="button" class="btn btn-danger">Rouge</button> <i class="icon-tag"></i>
         <button type="button" class="btn btn-warning">Jaune</button> <i class="icon-tag"></i>
         <button type="button" class="btn btn-success">Vert</button> <i class="icon-tag"></i>
         <button type="button" class="btn btn-primary">Bleu</button> <i class="icon-tag"></i>
+        <hr />
+        <
     </div>
     <div class="span10">       
 <div class="alert alert-info" id="deck">
+        <button class="btn btn-warning" type="button" onClick="pick();"><object id="deckimage" data="/back/" type="image/svg+xml"></object></button>
+        <button class="btn btn-info" type="button" onClick="pick();"><object data="/back/" type="image/svg+xml"></object> NB :  0</button>
 </div>
 
 <div class="alert alert-error" id="message">
@@ -68,8 +71,9 @@
                  });
                  request.done(function(msg) {
                     if(msg.length > 0)
-                        if(msg.length != $("#deck").html().length)
-                            $("#deck").html( msg );
+                        if(msg != $("#deckimage").attr("data"))
+                            $("#deckimage").attr("data",msg);
+                     //    $("#deck").html( msg );
                  });
         }
         deal  = function() {
@@ -80,7 +84,33 @@
         }
 
         play  = function(index) {
-             $("#message").html( "play " + index );
+                     var request = $.ajax({
+                     url: "game/play/"+index,
+                     dataType: "html"
+                 });
+                 request.done(function(msg) {
+                    if(msg.length > 0)
+                        if(msg.length != $("#deck").html().length)
+                            $("#message").html( msg );
+                 });
+
+        }
+        
+        playSpec  = function(index, color) {
+                  alert(color);
+        }
+
+        pick  = function() {
+                     var request = $.ajax({
+                     url: "game/pick/",
+                     dataType: "html"
+                 });
+                 request.done(function(msg) {
+                    if(msg.length > 0)
+                        if(msg.length != $("#deck").html().length)
+                            $("#message").html( msg );
+                 });
+
         }
 
              $(document).ready(function () {
