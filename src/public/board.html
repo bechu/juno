@@ -20,16 +20,10 @@
         <button class="btn btn-large btn-success" type="button" onClick="done();">Terminer</button> 
         <button class="btn btn-large btn-success" type="button" onClick="uno();">Uno</button> 
         <hr />
-        <button type="button" class="btn btn-danger">Rouge</button> <i class="icon-tag"></i>
-        <button type="button" class="btn btn-warning">Jaune</button> <i class="icon-tag"></i>
-        <button type="button" class="btn btn-success">Vert</button> <i class="icon-tag"></i>
-        <button type="button" class="btn btn-primary">Bleu</button> <i class="icon-tag"></i>
-        <hr />
-        <
     </div>
     <div class="span10">       
 <div class="alert alert-info" id="deck">
-        <button class="btn btn-warning" type="button" onClick="pick();"><object id="deckimage" data="/back/" type="image/svg+xml"></object></button>
+        <img id="deckimage" src="/back/" />
         <button class="btn btn-info" type="button" onClick="pick();"><object data="/back/" type="image/svg+xml"></object> NB :  0</button>
 </div>
 
@@ -44,7 +38,21 @@
   </div>
 </div>
 
-         <script>
+<a href="#myModal" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
+ 
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+  <div class="modal-body">
+    <p> Quelle couleur ? </p>
+    <a href="#" onClick="alert('jjj');"><img src="/card/green/:)" width="100" /></a>
+    <img src="/card/red/:)" width="100" onClick="alert('eer');" />
+    <img src="/card/yellow/:)" width="100" onClick="alert('eer');" />
+    <img src="/card/blue/:)" width="100" onClick="alert('eer');" />
+  </div>
+</div>
+
+
+         <script type="text/javascript" language="javascript">
          updatePlayers  = function() {
                      var request = $.ajax({
                      url: "game/update",
@@ -70,28 +78,27 @@
                      dataType: "html"
                  });
                  request.done(function(msg) {
-                    if(msg.length > 0)
-                        if(msg != $("#deckimage").attr("data"))
-                            $("#deckimage").attr("data",msg);
-                     //    $("#deck").html( msg );
+                    console.log(msg);
+                    console.log($("#deckimage").attr("data"));
+                    $("#deckimage").attr("src", msg);
+                    console.log($("#deckimage").attr("data"));
                  });
         }
         deal  = function() {
                      var request = $.ajax({
-                     url: "game/deal",
+                     url: "/game/deal",
                          dataType: "html"
                  });
         }
 
         play  = function(index) {
-                     var request = $.ajax({
-                     url: "game/play/"+index,
-                     dataType: "html"
+                            console.log('test ' +index);
+                    var request = $.ajax({
+                    url: "/game/play/"+index,
+                    dataType: "html"
                  });
                  request.done(function(msg) {
-                    if(msg.length > 0)
-                        if(msg.length != $("#deck").html().length)
-                            $("#message").html( msg );
+                    $("#message").html( msg );
                  });
 
         }
@@ -116,7 +123,6 @@
              $(document).ready(function () {
                 updatePlayers();
                 setInterval(function() {updateHand();updatePlayers();updateDeck()}, 1000); 
-                
              });
 
 

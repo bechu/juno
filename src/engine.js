@@ -142,17 +142,28 @@ Engine.prototype.RenderPlayers = function() {
 }//<span class="label label-important">Important</span>
 
 Engine.prototype.RenderHand = function(index) {
+	var ret = "<table>";
+	
 	if(index < this.players.length) {
 		var player = this.players[index];
 		var hand = player.GetHand();
 		if(hand.Changed() == false)
 			return "";
-		var ret = "";
+
+		ret += "<tr>";
+		var j = 0;
 		for(var i=0;i<hand.Size();i++)
 		{
+			if(j == 5) {
+				j = 0;
+				ret += "</tr><tr>";
+			};
+			j += 1;
+
 			var c = hand.Get(i);
-			ret += c.Render(i);
+			ret += "<td>"+c.Render(i)+"</td>"; //c.Render(i);
 		}
+		ret += "</tr></table>";
 		return ret;
 	}
 	return "";

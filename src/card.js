@@ -58,15 +58,24 @@ Card.prototype.IsCompatible = function(rhs) {
 }
 
 Card.prototype.Render = function(i) {
-  if(this.type == "*")
+  /*if(this.type == "*")
   {
     var ret = '<span class="btn btn-info"><object height="240" data="'+this.GetUri()+'" type="image/svg+xml"></object></button><br />';
     ret += '<button class="badge badge-success" type="button" onClick="playSpec('+i+', "green");">Vert</button>';
     ret += '<button class="badge badge-warning">Jaune</button>';
     ret += '<button class="badge badge-important">Rouge</button><button class="badge badge-info">Bleu</button></span>';
     return ret;
-  }
-  return '<button class="btn btn-info" type="button" onClick="play('+i+');"><object data="'+this.GetUri()+'" type="image/svg+xml"></object></button>';
+  }*/
+  var ret = "";
+  ret += "<object data='"+this.GetUri()+"' type='image/svg+xml'></object></button><br />";
+  ret += "<button class='btn' type='button' onClick='play("+i+");'>Choisir</button></span>";
+  ret += "";
+//  ret += "<span class='btn btn-info'><object height='240' data='"+this.GetUri()+"' type='image/svg+xml'></object></button><br />";
+  //ret += "<button class='btn' type='button' onClick='play("+i+");'>Choisir</button></span>'";
+  return ret;
+  //return "<button class='btn btn-large btn-primary' type='button' onClick='play("+i+");'><object data='"+this.GetUri()+"'' type='image/svg+xml'></object></button>";
+  //return '<button class="btn btn-info" type="button" onClick="alert(0);">Test</button>';
+  //<object data="'+this.GetUri()+'" type="image/svg+xml"></object></button>';
 }
 
 module.exports.Card = Card;
