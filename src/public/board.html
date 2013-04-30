@@ -23,8 +23,21 @@
     </div>
     <div class="span10">       
 <div class="alert alert-info" id="deck">
+    <table>
+        <tr><td>
         <img id="deckimage" src="/back/" />
-        <button class="btn btn-info" type="button" onClick="pick();"><object data="/back/" type="image/svg+xml"></object> NB :  0</button>
+        <div id="deckcolor" style="background-color:#0000FF;color:#FFFFFF">
+  <p>Couleur demandée</p>
+
+</div>
+</td><td>
+        <a href="#" onClick="pick();"><img src="/back/" /></a>
+                <div style="background-color:#0000FF;color:#FFFFFF">
+  <p>Nombre de carte ?</p>
+
+</div>
+
+    </td></tr></table>
 </div>
 
 <div class="alert alert-error" id="message">
@@ -44,10 +57,8 @@
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
   <div class="modal-body">
     <p> Quelle couleur ? </p>
-    <a href="#" onClick="alert('jjj');"><img src="/card/green/:)" width="100" /></a>
-    <img src="/card/red/:)" width="100" onClick="alert('eer');" />
-    <img src="/card/yellow/:)" width="100" onClick="alert('eer');" />
-    <img src="/card/blue/:)" width="100" onClick="alert('eer');" />
+    <div id="listcolor">
+    </div>
   </div>
 </div>
 
@@ -78,10 +89,14 @@
                      dataType: "html"
                  });
                  request.done(function(msg) {
-                    console.log(msg);
-                    console.log($("#deckimage").attr("data"));
                     $("#deckimage").attr("src", msg);
-                    console.log($("#deckimage").attr("data"));
+                 });
+                var request = $.ajax({
+                     url: "game/deck/color",
+                     dataType: "html"
+                 });
+                 request.done(function(msg) {
+                    $("#deckcolor").attr("style", "background-color:"+msg+";color:#FFFFFF");
                  });
         }
         deal  = function() {
@@ -92,7 +107,6 @@
         }
 
         play  = function(index) {
-                            console.log('test ' +index);
                     var request = $.ajax({
                     url: "/game/play/"+index,
                     dataType: "html"
@@ -102,9 +116,35 @@
                  });
 
         }
-        
-        playSpec  = function(index, color) {
-                  alert(color);
+
+        playSpecial  = function(index, color) {
+            alert(index);
+             alert(color);
+             /*
+                    var request = $.ajax({
+                    url: "/game/playspecial/"+index+"/"+color,
+                    dataType: "html"
+                 });
+                 request.done(function(msg) {
+                    $("#message").html( msg );
+                 });
+*/
+        }
+
+        playChooseColor  = function(index) {
+            var msg =  "";
+            var colors = new Array("green", "blue", "red", "yellow");
+            for(var c in colors) {
+                click = "playSpecial("+index+", "'+colors[c]+'"");"
+                msg += '<a href="#" onClick=""  data-dismiss="modal" aria-hidden="true"><img src="/card/'+colors[c]+'/:)" width="100" /></a>';
+            };
+
+            /*'<a href="#" onClick="alert('jjj');"><img src="/card/green/:)" width="100" /></a> \
+    <img src="/card/red/:)" width="100" onClick="alert('eer');" /> \
+    <img src="/card/yellow/:)" width="100" onClick="alert('eer');" /> \
+    <img src="/card/blue/:)" width="100" onClick="alert('eer');" />';*/
+            $("#listcolor").html( msg );          
+            $('#myModal').modal()
         }
 
         pick  = function() {
@@ -120,10 +160,10 @@
 
         }
 
-             $(document).ready(function () {
-                updatePlayers();
-                setInterval(function() {updateHand();updatePlayers();updateDeck()}, 1000); 
-             });
+        $(document).ready(function () {
+            updatePlayers();
+            setInterval(function() {updateHand();updatePlayers();updateDeck()}, 1000); 
+        });
 
 
          </script>

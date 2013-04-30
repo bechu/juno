@@ -25,6 +25,15 @@ Card.prototype.IsSameType = function(rhs) {
     return false;
 }
 
+Card.prototype.GetColor = function() {
+  if(this.type == "*")
+  {
+    if(this.subtype == "+4") return this.choice;
+    if(this.subtype == "joker") return this.choice;
+  }
+  return this.type;
+}
+
 Card.prototype.GetUri = function() {
   if(this.type == "*")
   {
@@ -44,10 +53,11 @@ Card.prototype.IsCompatible = function(rhs) {
     if(rhs.subtype == "joker") return true;
   }  
 
-  if(this.type == "*")
-  {
-    if(this.subtype == "+4") return true;
-    if(this.subtype == "joker") return true;
+  if(this.type == "*") {
+    if(this.choice == rhs.type) {
+      if(this.subtype == "+4") return true;
+      if(this.subtype == "joker") return true;
+    }
   }
 
   if(this.type == rhs.type)
@@ -58,24 +68,10 @@ Card.prototype.IsCompatible = function(rhs) {
 }
 
 Card.prototype.Render = function(i) {
-  /*if(this.type == "*")
-  {
-    var ret = '<span class="btn btn-info"><object height="240" data="'+this.GetUri()+'" type="image/svg+xml"></object></button><br />';
-    ret += '<button class="badge badge-success" type="button" onClick="playSpec('+i+', "green");">Vert</button>';
-    ret += '<button class="badge badge-warning">Jaune</button>';
-    ret += '<button class="badge badge-important">Rouge</button><button class="badge badge-info">Bleu</button></span>';
-    return ret;
-  }*/
-  var ret = "";
-  ret += "<object data='"+this.GetUri()+"' type='image/svg+xml'></object></button><br />";
-  ret += "<button class='btn' type='button' onClick='play("+i+");'>Choisir</button></span>";
-  ret += "";
-//  ret += "<span class='btn btn-info'><object height='240' data='"+this.GetUri()+"' type='image/svg+xml'></object></button><br />";
-  //ret += "<button class='btn' type='button' onClick='play("+i+");'>Choisir</button></span>'";
-  return ret;
-  //return "<button class='btn btn-large btn-primary' type='button' onClick='play("+i+");'><object data='"+this.GetUri()+"'' type='image/svg+xml'></object></button>";
-  //return '<button class="btn btn-info" type="button" onClick="alert(0);">Test</button>';
-  //<object data="'+this.GetUri()+'" type="image/svg+xml"></object></button>';
+  if(this.type == "*")
+    return '<a href="#" onClick="playChooseColor(\''+i+'\');"><img src="'+this.GetUri()+'"  width="100" /></a>';
+
+  return '<a href="#" onClick="play(\''+i+'\');"><img src="'+this.GetUri()+'"  width="100" /></a>';
 }
 
 module.exports.Card = Card;

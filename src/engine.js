@@ -68,16 +68,27 @@ Engine.prototype.GetNextPlayer = function() {
 }
 
 Engine.prototype.Play = function(index) {
+	return this.PlaySpecial(index, "black");
+}
+
+Engine.prototype.PlaySpecial = function(index, color) {
 	var c = this.players[this.player].GetHand().Get(index);
 	if(c == null)
 		return "Cette carte n'existe pas !";
 	if(this.heap[this.heap.length-1].IsCompatible(c) == false)
 		return "Tu ne peux pas jouer avec cette carte !";
+	c.choice = color;
 	this.heap.push(c);
 	this.players[this.player].GetHand().Remove(index);
 	//this.GetNextPlayer();
 	this.heam_changed = true;
 	return "well"
+}
+
+Engine.prototype.GetHeapTop = function() {
+	if(this.heap.length == 0)
+		return null;
+	return this.heap[this.heap.length-1]
 }
 
 Engine.prototype.Pick = function(index) {
@@ -91,15 +102,15 @@ Engine.prototype.Pick = function(index) {
 	return "";
 }
 
+Engine.prototype.GetDeckColor = function() {
+	var last = this.GetHeapTop();
+	if(last == null) return "black";
+	return last.GetColor();
+}
 
 Engine.prototype.RenderDeck = function() {
 	if(this.heap.length != 0)
 		return this.heap[this.heap.length-1].GetUri();
-	/*
-		ret +=  '<button class="btn btn-warning" type="button" onClick="pick();"><object data="'+this.heap[this.heap.length-1].GetUri()+'" type="image/svg+xml"></object></button>';
-
-		ret +=  '<button class="btn btn-info" type="button" onClick="pick();"><object data="/back/" type="image/svg+xml"></object> NB :  '+ this.DeckSize()+'</button>';
-*/
 	
 	return "/back/";
 }

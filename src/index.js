@@ -15,7 +15,7 @@ app.configure(function() {
 
      app.set('views', __dirname+"/public/");
     //    app.set('view engine', 'ejs');
-    app.use(express.logger('dev'));
+    //app.use(express.logger('dev'));
     app.use(express.static(__dirname+"/public/")); 
 
     //    app.use(express.bodyParser());
@@ -70,10 +70,19 @@ app.get('/game/deck', function(req, res) {
     res.send(app.game.RenderDeck());
 });
 
+app.get('/game/deck/color', function(req, res) {
+    res.send(app.game.GetDeckColor());
+});
+
 app.get('/game/play/:index', function(req, res) {
     res.send(app.game.Play(req.params.index));
 });
 
+app.get('/game/playspecial/:index/:color', function(req, res) {
+    console.log(req.params.index);
+    console.log(req.params.color);
+    res.send(app.game.PlaySpecial(req.params.index, req.params.color));
+});
 
 app.get('/game/pick/', function(req, res) {
     res.send(app.game.Pick(req.session.gid));
