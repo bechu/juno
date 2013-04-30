@@ -17,8 +17,7 @@
         <hr />
         <button class="btn btn-large btn-primary" type="button" onClick="deal();">Distribuer</button> 
         <hr />
-        <button class="btn btn-large btn-success" type="button" onClick="done();">Terminer</button> 
-        <button class="btn btn-large btn-success" type="button" onClick="uno();">Uno</button> 
+        <a class="btn btn-large btn-success" type="button" href="#" onClick="done();">Terminer</a> 
         <hr />
     </div>
     <div class="span10">       
@@ -32,7 +31,7 @@
 </div>
 </td><td>
         <a href="#" onClick="pick();"><img src="/back/" /></a>
-                <div style="background-color:#0000FF;color:#FFFFFF">
+                <div id="decksize" style="background-color:#0000FF;color:#FFFFFF">
   <p>Nombre de carte ?</p>
 
 </div>
@@ -51,8 +50,6 @@
   </div>
 </div>
 
-<a href="#myModal" role="button" class="btn" data-toggle="modal">Launch demo modal</a>
- 
 <!-- Modal -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
   <div class="modal-body">
@@ -83,6 +80,7 @@
                         $("#myhand").html( msg );
                  });
         }
+
         updateDeck  = function() {
                      var request = $.ajax({
                      url: "game/deck",
@@ -117,10 +115,15 @@
 
         }
 
+        done  = function(index) {
+                    var request = $.ajax({
+                    url: "/game/next/",
+                    dataType: "html"
+                 });
+
+        }
+
         playSpecial  = function(index, color) {
-            alert(index);
-             alert(color);
-             /*
                     var request = $.ajax({
                     url: "/game/playspecial/"+index+"/"+color,
                     dataType: "html"
@@ -128,21 +131,26 @@
                  request.done(function(msg) {
                     $("#message").html( msg );
                  });
-*/
+        }
+
+        getCount  = function(index, color) {
+                    var request = $.ajax({
+                    url: "/deck/size/",
+                    dataType: "html"
+                 });
+                 request.done(function(msg) {
+                    $("#decksize").html( msg + " Cartes" );
+                 });
         }
 
         playChooseColor  = function(index) {
             var msg =  "";
             var colors = new Array("green", "blue", "red", "yellow");
             for(var c in colors) {
-                click = "playSpecial("+index+", "'+colors[c]+'"");"
-                msg += '<a href="#" onClick=""  data-dismiss="modal" aria-hidden="true"><img src="/card/'+colors[c]+'/:)" width="100" /></a>';
-            };
+                click = "playSpecial("+index+", '"+colors[c]+"');"
+                msg += '<a href="#" onClick="'+click+'"  data-dismiss="modal" aria-hidden="true"><img src="/card/'+colors[c]+'/:)" width="100" /></a>';
 
-            /*'<a href="#" onClick="alert('jjj');"><img src="/card/green/:)" width="100" /></a> \
-    <img src="/card/red/:)" width="100" onClick="alert('eer');" /> \
-    <img src="/card/yellow/:)" width="100" onClick="alert('eer');" /> \
-    <img src="/card/blue/:)" width="100" onClick="alert('eer');" />';*/
+            };
             $("#listcolor").html( msg );          
             $('#myModal').modal()
         }
@@ -162,7 +170,7 @@
 
         $(document).ready(function () {
             updatePlayers();
-            setInterval(function() {updateHand();updatePlayers();updateDeck()}, 1000); 
+            setInterval(function() {updateHand();updatePlayers();updateDeck();getCount();}, 1000); 
         });
 
 

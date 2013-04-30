@@ -19,6 +19,12 @@ Deck.prototype.Reset = function(count) {
   this.d.shuffle();
 }
 
+Deck.prototype.Add = function(card) {
+  console.log(this.d.length);
+  this.d.putOnBottomOfDeck([card]);
+  console.log(this.d.length);
+}
+
 Deck.prototype.Create = function() {
   var colors = ['blue', 'red', 'yellow', 'green'];
   var ret = new Array();

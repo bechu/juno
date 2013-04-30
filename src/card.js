@@ -2,7 +2,7 @@
 var Card = function(type, subtype) {
   this.type = type;
   this.subtype = subtype;
-  this.choice = "red";
+  this.choice = "black";
 }
 
 Card.prototype.toString  = function() {
@@ -54,7 +54,8 @@ Card.prototype.IsCompatible = function(rhs) {
   }  
 
   if(this.type == "*") {
-    if(this.choice == rhs.type) {
+
+    if(this.choice == rhs.type || this.choice == "black") {
       if(this.subtype == "+4") return true;
       if(this.subtype == "joker") return true;
     }
@@ -71,7 +72,7 @@ Card.prototype.Render = function(i) {
   if(this.type == "*")
     return '<a href="#" onClick="playChooseColor(\''+i+'\');"><img src="'+this.GetUri()+'"  width="100" /></a>';
 
-  return '<a href="#" onClick="play(\''+i+'\');"><img src="'+this.GetUri()+'"  width="100" /></a>';
+  return '<a href="#" onClick="play('+i+');"><img src="'+this.GetUri()+'"  width="100" /></a>';
 }
 
 module.exports.Card = Card;

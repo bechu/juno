@@ -7,7 +7,7 @@ var Engine = function() {
 	this.players = new Array();
 	this.deck = new deck.Deck();
 	this.game_started = false;
-	this.heap = new Array();
+	this.heap = null;
 	this.heam_changed = true;
 	this.player = -1;
 }
@@ -22,7 +22,7 @@ Engine.prototype.AddPlayer  = function(name) {
 }
 
 Engine.prototype.RemovePlayer  = function(index) {
-	this.players = this.players.slice(index+1, 1)
+	this.players = this.players.slice(index, 1)
 }
 
 Engine.prototype.CountPlayer  = function() {
@@ -47,7 +47,8 @@ Engine.prototype.Deal = function() {
 	for(var i in this.players) {
 		this.DealPlayer(i);
 	}
-	this.heap.push(this.deck.Deal(1));
+	this.heap = this.deck.Deal(1);
+	this.deck.Add(this.heap);
 	this.player = 0;
 }
 
@@ -75,20 +76,17 @@ Engine.prototype.PlaySpecial = function(index, color) {
 	var c = this.players[this.player].GetHand().Get(index);
 	if(c == null)
 		return "Cette carte n'existe pas !";
-	if(this.heap[this.heap.length-1].IsCompatible(c) == false)
+	var h = this.heap;
+	console.log("Fight A["+c.type+"-"+c.subtype+"-"+c.choice+"] B["+h.type+"-"+h.subtype+"-"+h.choice+"] ")
+	if(h.IsCompatible(c) == false)
 		return "Tu ne peux pas jouer avec cette carte !";
 	c.choice = color;
-	this.heap.push(c);
+	this.heap = c;
+	this.deck.Add(c);
 	this.players[this.player].GetHand().Remove(index);
-	//this.GetNextPlayer();
 	this.heam_changed = true;
-	return "well"
-}
-
-Engine.prototype.GetHeapTop = function() {
-	if(this.heap.length == 0)
-		return null;
-	return this.heap[this.heap.length-1]
+	//this.GetNextPlayer();
+	return "Bien joué"
 }
 
 Engine.prototype.Pick = function(index) {
@@ -103,14 +101,13 @@ Engine.prototype.Pick = function(index) {
 }
 
 Engine.prototype.GetDeckColor = function() {
-	var last = this.GetHeapTop();
-	if(last == null) return "black";
-	return last.GetColor();
+	if(this.heap == null) return "black";
+	return this.heap.GetColor();
 }
 
 Engine.prototype.RenderDeck = function() {
-	if(this.heap.length != 0)
-		return this.heap[this.heap.length-1].GetUri();
+	if(this.heap != null)
+		return this.heap.GetUri();
 	
 	return "/back/";
 }
@@ -165,7 +162,7 @@ Engine.prototype.RenderHand = function(index) {
 		var j = 0;
 		for(var i=0;i<hand.Size();i++)
 		{
-			if(j == 5) {
+			if(j == 10) {
 				j = 0;
 				ret += "</tr><tr>";
 			};

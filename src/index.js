@@ -40,13 +40,7 @@ app.get('/', function(req, res) {
     if(req.session.login)
         res.sendfile(__dirname+'/public/board.html');
     else
-    {
-    req.session.login = "Jérôme";
-    req.session.gid = app.game.AddPlayer(req.session.login);
-    app.game.AddPlayer("Hélène");
-    res.redirect("/");
-       // res.sendfile(__dirname+'/public/login.html');
-    }
+        res.sendfile(__dirname+'/public/login.html');
 });
 
 app.get('/game/name', function(req, res) {
@@ -62,6 +56,11 @@ app.get('/game/update', function(req, res) {
     res.send(app.game.RenderPlayers());
 });
 
+app.get('/game/next', function(req, res) {
+    app.game.GetNextPlayer();
+    res.send("done");
+});
+
 app.get('/game/myhand', function(req, res) {
     res.send(app.game.RenderHand(req.session.gid));
 });
@@ -74,13 +73,19 @@ app.get('/game/deck/color', function(req, res) {
     res.send(app.game.GetDeckColor());
 });
 
+app.get('/deck/size/', function(req, res) {
+    res.send(" " + app.game.DeckSize());
+});
+
 app.get('/game/play/:index', function(req, res) {
+    if(req.session.gid != app.game.player)
+        return res.send("Ce n'est pas à toi de jouer !");
     res.send(app.game.Play(req.params.index));
 });
 
 app.get('/game/playspecial/:index/:color', function(req, res) {
-    console.log(req.params.index);
-    console.log(req.params.color);
+    if(req.session.gid != app.game.player)
+        return res.send("Ce n'est pas à toi de jouer !");
     res.send(app.game.PlaySpecial(req.params.index, req.params.color));
 });
 
